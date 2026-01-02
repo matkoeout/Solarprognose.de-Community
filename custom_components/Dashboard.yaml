@@ -14,7 +14,7 @@ views:
                     name: Aktuelle Stunde
                   - type: entity
                     entity: sensor.solarprognose_nachste_stunde
-                    name: Nächste Stunde
+                    name: NÃ¤chste Stunde
                   - type: entity
                     entity: sensor.solarprognose_heute_gesamt
                     name: Prognose Heute
@@ -61,7 +61,7 @@ views:
                   - entity: sensor.solarprognose_letzte_abfrage
                     name: Letzter Abruf
                   - entity: sensor.solarprognose_nachste_abfragezeit
-                    name: Nächster geplanter Abruf
+                    name: NÃ¤chster geplanter Abruf
       - type: grid
         cards:
           - type: vertical-stack
@@ -83,7 +83,7 @@ views:
                     entity: sensor.solarprognose_resttag
                     color: amber
               - type: energy-solar-graph
-                title: Stündliche Kurve
+                title: StÃ¼ndliche Kurve
               - type: entities
                 entities:
                   - entity: sensor.solarprognose_morgen_gesamt
