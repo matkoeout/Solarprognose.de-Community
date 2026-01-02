@@ -55,7 +55,7 @@ Es handelt sich um eine **nicht-offizielle Community-Integration**. Es besteht *
 1. HACS öffnen
 2. Integrationen → Benutzerdefinierte Repositories
 3. Repository hinzufügen:
-   https://github.com/DEIN_GITHUB_NAME/link_solarprognose_de
+   https://github.com/matkoeout/link_solarprognose_de
 4. Kategorie: Integration
 5. Integration installieren
 6. Home Assistant neu starten
