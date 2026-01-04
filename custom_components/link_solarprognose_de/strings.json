@@ -33,5 +33,19 @@
       "cannot_connect": "Verbindung fehlgeschlagen.",
       "invalid_auth": "Zugangsdaten abgelehnt."
     }
+  },
+  "entity": {
+    "sensor": {
+      "today_total": { "name": "Heute Gesamt" },
+      "tomorrow_total": { "name": "Morgen Gesamt" },
+      "rest_day": { "name": "Resttag" },
+      "current_hour": { "name": "Aktuelle Stunde" },
+      "next_hour": { "name": "Nächste Stunde" },
+      "forecast": { "name": "Prognose" },
+      "api_status": { "name": "API Status" },
+      "api_count": { "name": "API Abfragen heute" },
+      "next_update": { "name": "Nächste Abfragezeit" },
+      "last_update": { "name": "Letzte Abfrage" }
+    }
   }
 }

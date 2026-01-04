@@ -25,21 +25,16 @@ async def validate_input(hass, data):
         async with async_timeout.timeout(10):
             session = async_get_clientsession(hass)
             async with session.get(url) as response:
-                # HTTP Ebene prüfen
                 if response.status != 200:
-                    _LOGGER.error("API Server antwortete mit Status %s", response.status)
                     return "cannot_connect"
                 
                 res = await response.json()
-                # Solarprognose API Logik prüfen
                 if res.get("status") != 0:
-                    _LOGGER.warning("API Key abgelehnt: %s", res.get("message"))
                     return "invalid_auth"
                     
     except aiohttp.ClientError:
         return "cannot_connect"
-    except Exception as err:
-        _LOGGER.exception("Unerwarteter Fehler bei Validierung: %s", err)
+    except Exception:
         return "unknown"
 
     return None
