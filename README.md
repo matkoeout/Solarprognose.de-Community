@@ -27,7 +27,7 @@ MIT DER INSTALLATION UND NUTZUNG DIESER INTEGRATION ERKLÄRST DU DICH AUSDRÜCKL
 
 ## Beschreibung
 
-Diese Custom Integration für Home Assistant bindet die WebAPI von Solarprognose.de ein und stellt PV-Ertragsprognosen als Sensoren und als Weather-Entity zur Verfügung.
+Diese Custom Integration für Home Assistant bindet die WebAPI von Solarprognose.de ein und stellt PV-Ertragsprognosen als Sensoren zur Verfügung.
 
 Es handelt sich um eine **nicht-offizielle Community-Integration**. Es besteht **keine Verbindung** zum Betreiber von Solarprognose.de.
 
@@ -40,11 +40,10 @@ Es handelt sich um eine **nicht-offizielle Community-Integration**. Es besteht *
 - Prognose des verbleibenden Tagesertrags
 - Leistung aktuelle Stunde
 - Leistung nächste Stunde
-- Aggregierte Tagesprognose (Energy Dashboard geeignet)
+- Aggregierte Tagesprognose (nicht für das Energy Dashboard geeignet)
 - Anzeige der nächsten erlaubten API-Abfragezeit
 - Zähler für tägliche API-Aufrufe
 - API-Status- und Fehlermeldungssensor
-- Weather-Entity mit stündlicher Prognose
 
 ---
 
@@ -122,18 +121,6 @@ API-Key oder API-URL können jederzeit unter den Integrationsoptionen geändert 
 - API Abfragen heute
 - Letzte erfolgreiche Abfrage
 - Nächste erlaubte Abfragezeit
-
----
-
-## Weather-Entity
-
-Zusätzlich wird eine Weather-Entity mit stündlichen Prognosedaten bereitgestellt.
-
----
-
-## Energy Dashboard
-
-Der Prognose-Sensor kann im Energy Dashboard von Home Assistant als Prognosequelle verwendet werden.
 
 ---
 
