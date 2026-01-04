@@ -22,16 +22,19 @@
   "options": {
     "step": {
       "init": {
-        "title": "Einstellungen anpassen",
+        "title": "Solarprognose WebAPI Setup",
+        "description": "Gib einen API-Key ODER eine URL an. (Hinweis: Ein Test-Aufruf verbraucht 1 API-Credit).",
         "data": {
           "api_key": "API Key",
-          "api_url": "API URL"
+          "api_url": "API URL (überschreibt Key)"
         }
       }
     },
     "error": {
-      "cannot_connect": "Verbindung fehlgeschlagen.",
-      "invalid_auth": "Zugangsdaten abgelehnt."
+      "missing_api": "Eingabe erforderlich.",
+      "cannot_connect": "Server nicht erreichbar.",
+      "invalid_auth": "Key ungültig oder abgelaufen.",
+      "unknown": "Fehler beim Test-Aufruf."
     }
   },
   "entity": {
