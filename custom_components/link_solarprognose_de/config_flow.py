@@ -70,18 +70,15 @@ class SolarPrognoseConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     @staticmethod
     @callback
-    def async_get_options_flow(config_entry):
-        return SolarPrognoseOptionsFlowHandler(config_entry)
+    def async_get_options_flow(config_entry: config_entries.ConfigEntry):
+        """Gibt den Options-Flow zurück."""
+        return SolarPrognoseOptionsFlowHandler()
 
 class SolarPrognoseOptionsFlowHandler(config_entries.OptionsFlow):
     """Steuerung der Einstellungen (Optionen)."""
-    
-    # Wir nutzen hier keinen __init__ mit Zuweisung an self.config_entry,
-    # da die Basisklasse das bereits intern verwaltet.
 
     async def async_step_init(self, user_input=None) -> FlowResult:
         errors = {}
-        # Zugriff auf das ConfigEntry erfolgt über self.config_entry (Property der Basisklasse)
         if user_input is not None:
             error_key = await validate_input(self.hass, user_input)
             if error_key:
