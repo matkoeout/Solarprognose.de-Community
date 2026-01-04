@@ -4,13 +4,19 @@
     "step": {
       "user": {
         "title": "Solarprognose WebAPI Setup",
-        "description": "Gib entweder einen API-Key ODER eine vollst�ndige API-URL von https://solarprognose.de/web/de/plan/user-api/2 an.",
+        "description": "Gib einen API-Key ODER eine URL an. (Hinweis: Ein Test-Aufruf verbraucht 1 API-Credit).",
         "data": {
-          "name": "Anlagenname (z.B. Dach West)",
+          "name": "Anlagenname",
           "api_key": "API Key",
-          "api_url": "Komplette API URL (alternativ)"
+          "api_url": "API URL (überschreibt Key)"
         }
       }
+    },
+    "error": {
+      "missing_api": "Eingabe erforderlich.",
+      "cannot_connect": "Server nicht erreichbar.",
+      "invalid_auth": "Key ungültig oder abgelaufen.",
+      "unknown": "Fehler beim Test-Aufruf."
     }
   },
   "options": {
@@ -19,9 +25,13 @@
         "title": "Einstellungen anpassen",
         "data": {
           "api_key": "API Key",
-          "api_url": "Komplette API URL (alternativ)"
+          "api_url": "API URL"
         }
       }
+    },
+    "error": {
+      "cannot_connect": "Verbindung fehlgeschlagen.",
+      "invalid_auth": "Zugangsdaten abgelehnt."
     }
   }
 }
