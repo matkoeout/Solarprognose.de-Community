@@ -26,18 +26,16 @@ async def validate_input(hass, data):
             session = async_get_clientsession(hass)
             async with session.get(url) as response:
                 if response.status != 200:
-                    _LOGGER.error("API Server antwortete mit Status %s", response.status)
                     return "cannot_connect"
                 
                 res = await response.json()
                 if res.get("status") != 0:
-                     _LOGGER.warning("API Key abgelehnt: %s", res.get("message"))
                     return "invalid_auth"
                     
     except aiohttp.ClientError:
         return "cannot_connect"
-    except Exception as err:
-        _LOGGER.exception("Unerwarteter Fehler bei Validierung: %s", err)
+    except Exception:
+        return "unknown"
 
     return None
 
@@ -77,11 +75,13 @@ class SolarPrognoseConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 class SolarPrognoseOptionsFlowHandler(config_entries.OptionsFlow):
     """Steuerung der Einstellungen (Optionen)."""
-    def __init__(self, config_entry):
-        self.config_entry = config_entry
+    
+    # Wir nutzen hier keinen __init__ mit Zuweisung an self.config_entry,
+    # da die Basisklasse das bereits intern verwaltet.
 
     async def async_step_init(self, user_input=None) -> FlowResult:
         errors = {}
+        # Zugriff auf das ConfigEntry erfolgt über self.config_entry (Property der Basisklasse)
         if user_input is not None:
             error_key = await validate_input(self.hass, user_input)
             if error_key:
@@ -92,8 +92,18 @@ class SolarPrognoseOptionsFlowHandler(config_entries.OptionsFlow):
         return self.async_show_form(
             step_id="init",
             data_schema=vol.Schema({
-                vol.Optional("api_key", default=self.config_entry.options.get("api_key", self.config_entry.data.get("api_key", ""))): str,
-                vol.Optional("api_url", default=self.config_entry.options.get("api_url", self.config_entry.data.get("api_url", ""))): str,
+                vol.Optional(
+                    "api_key", 
+                    default=self.config_entry.options.get(
+                        "api_key", self.config_entry.data.get("api_key", "")
+                    )
+                ): str,
+                vol.Optional(
+                    "api_url", 
+                    default=self.config_entry.options.get(
+                        "api_url", self.config_entry.data.get("api_url", "")
+                    )
+                ): str,
             }),
             errors=errors,
         )

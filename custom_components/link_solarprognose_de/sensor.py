@@ -69,7 +69,7 @@ class SolarPrognoseCoordinator(DataUpdateCoordinator):
                     self.api_message = res.get("message", "")
                     
                     if self.api_status != 0:
-                    _LOGGER.error("Solarprognose API Fehler: %s", self.api_message)
+                        _LOGGER.error("Solarprognose API Fehler: %s", self.api_message)
                         return self.data or {}
 
                     self.last_api_success = now
