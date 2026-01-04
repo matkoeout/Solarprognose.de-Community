@@ -26,16 +26,18 @@ async def validate_input(hass, data):
             session = async_get_clientsession(hass)
             async with session.get(url) as response:
                 if response.status != 200:
+                    _LOGGER.error("API Server antwortete mit Status %s", response.status)
                     return "cannot_connect"
                 
                 res = await response.json()
                 if res.get("status") != 0:
+                     _LOGGER.warning("API Key abgelehnt: %s", res.get("message"))
                     return "invalid_auth"
                     
     except aiohttp.ClientError:
         return "cannot_connect"
-    except Exception:
-        return "unknown"
+    except Exception as err:
+        _LOGGER.exception("Unerwarteter Fehler bei Validierung: %s", err)
 
     return None
 
