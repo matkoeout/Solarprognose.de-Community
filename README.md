@@ -25,10 +25,14 @@ Diese Custom Integration bindet die WebAPI von Solarprognose.de ein. Es handelt 
 1. Öffne **HACS** in Home Assistant.
 2. Gehe zu **Integrationen**.
 3. Klicke oben rechts auf die drei Punkte und wähle **Benutzerdefinierte Repositories**.
-4. Füge die URL hinzu: `https://github.com/matkoeout/link_solarprognose_de`
+4. Füge die URL hinzu: `https://github.com/matkoeout/solarprognose.de-community`
 5. Wähle als Kategorie **Integration**.
 6. Suche nach "Solarprognose.de" und installiere sie.
 7. Starte Home Assistant neu.
+
+### manuelle Installation
+1. Kopiere den Ordner `custom_components/solarprognose.de-community` in den lokalen `config/custom_components/` Ordner.
+2. Home Assistant neu starten.
 
 ### Konfiguration
 1. Gehe zu **Einstellungen** -> **Geräte & Dienste**.
@@ -36,6 +40,12 @@ Diese Custom Integration bindet die WebAPI von Solarprognose.de ein. Es handelt 
 3. Suche nach **Solarprognose.de (Community)**.
 4. Gib deinen API-Key oder die API-URL ein.
 
+### Sensoren
+* **Energie:** today_total, tomorrow_total, rest_day, forecast, current_hour, next_hour
+* **Status:** api_status, api_count, last_update, next_update
+
+### Lizenz
+MIT Lizenz.
 ---
 
 <a name="-english"></a>
@@ -58,13 +68,13 @@ This custom integration connects the Solarprognose.de WebAPI to Home Assistant. 
 1. Open **HACS** in Home Assistant.
 2. Go to **Integrations**.
 3. Click the three dots in the top right corner and select **Custom repositories**.
-4. Add the URL: `https://github.com/matkoeout/link_solarprognose_de`
+4. Add the URL: `https://github.com/matkoeout/solarprognose.de-community`
 5. Select **Integration** as the category.
 6. Search for "Solarprognose.de" and install it.
 7. Restart Home Assistant.
 
 ### Manual Installation
-1. Copy the folder `custom_components/link_solarprognose_de` to your `config/custom_components/` directory.
+1. Copy the folder `custom_components/solarprognose.de-community` to your `config/custom_components/` directory.
 2. Restart Home Assistant.
 
 ### Configuration
@@ -74,9 +84,8 @@ This custom integration connects the Solarprognose.de WebAPI to Home Assistant. 
 4. Enter your API Key or API URL.
 
 ### Sensors
-* **Energy:** Today Total, Tomorrow Total, Remaining Day, Forecast (kWh)
-* **Power:** Current Hour, Next Hour (W)
-* **Status:** API Status, API Requests Today, Last/Next Update
+* **Energy:** today_total, tomorrow_total, rest_day, forecast, current_hour, next_hour
+* **Status:** api_status, api_count, last_update, next_update
 
 ### License
 MIT License.
