@@ -14,7 +14,7 @@ DIESE SOFTWARE WIRD **OHNE JEGLICHE GARANTIE** ZUR VERFÜGUNG GESTELLT. DIE NUTZ
 Der Autor übernimmt keinerlei Haftung für finanzielle Verluste, falsche Prognosedaten oder Schäden an Hardware/Software. Die Werte sind nicht für Abrechnungszwecke geeignet.
 
 ### Beschreibung
-Diese Custom Integration bindet die WebAPI von Solarprognose.de ein. Es handelt sich um eine **nicht-offizielle Community-Integration**.
+Diese Custom Integration bindet die WebAPI von Solarprognose.de ein. Es handelt sich um eine **nicht-offizielle Community-Integration**. Es besteht **keine Verbindung** zum Betreiber von Solarprognose.de.
 
 ### Funktionsumfang
 - Prognose Heute / Morgen / Resttag
