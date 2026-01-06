@@ -12,7 +12,7 @@ _LOGGER = logging.getLogger(__name__)
 DOMAIN = "solarprognose_de_community"
 
 async def validate_input(hass, data):
-    """Prüft die Zugangsdaten und gibt spezifische Fehlercodes zurück."""
+    """PrÃ¼ft die Zugangsdaten und gibt spezifische Fehlercodes zurÃ¼ck."""
     api_key = data.get("api_key")
     api_url = data.get("api_url")
 
@@ -71,7 +71,7 @@ class SolarPrognoseConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry: config_entries.ConfigEntry):
-        """Gibt den Options-Flow zurück."""
+        """Gibt den Options-Flow zurÃ¼ck."""
         return SolarPrognoseOptionsFlowHandler()
 
 class SolarPrognoseOptionsFlowHandler(config_entries.OptionsFlow):
