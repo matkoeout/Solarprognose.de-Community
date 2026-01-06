@@ -10,96 +10,82 @@
 ## 🇩🇪 Deutsch
 
 ### WICHTIGER HINWEIS / HAFTUNGSAUSSCHLUSS
-
-DIESE SOFTWARE WIRD **OHNE JEGLICHE GARANTIE** ZUR VERFÜGUNG GESTELLT.
-
-DIE NUTZUNG ERFOLGT **AUSSCHLIESSLICH AUF EIGENE GEFAHR**.
-
-DER AUTOR ÜBERNIMMT **KEINERLEI HAFTUNG** FÜR:
-- FALSCHE, UNVOLLSTÄNDIGE ODER VERALTETE PROGNOSEDATEN
-- FINANZIELLE VERLUSTE, ENTGANGENE ERTRÄGE ODER FEHLENTSCHEIDUNGEN
-- FEHLFUNKTIONEN, AUSFÄLLE ODER DATENVERLUSTE
-- SCHÄDEN AN HARDWARE, SOFTWARE ODER PV-ANLAGEN
-- FOLGESCHÄDEN JEGLICHER ART
-
-INSBESONDERE SIND DIE BERECHNETEN PROGNOSEWERTE **NICHT** FÜR:
-- ABRECHNUNGEN
-- GARANTIE- ODER GEWÄHRLEISTUNGSZWECKE
-- VERTRAGLICHE ODER RECHTLICHE ENTSCHEIDUNGEN
-- KRITISCHE STEUERUNGEN
-GEEIGNET.
-
-MIT DER INSTALLATION UND NUTZUNG DIESER INTEGRATION ERKLÄRST DU DICH AUSDRÜCKLICH DAMIT EINVERSTANDEN.
-
----
+DIESE SOFTWARE WIRD **OHNE JEGLICHE GARANTIE** ZUR VERFÜGUNG GESTELLT. DIE NUTZUNG ERFOLGT **AUSSCHLIESSLICH AUF EIGENE GEFAHR**.
+Der Autor übernimmt keinerlei Haftung für finanzielle Verluste, falsche Prognosedaten oder Schäden an Hardware/Software. Die Werte sind nicht für Abrechnungszwecke geeignet.
 
 ### Beschreibung
-Diese Custom Integration für Home Assistant bindet die WebAPI von Solarprognose.de ein und stellt PV-Ertragsprognosen als Sensoren zur Verfügung. Es handelt sich um eine **nicht-offizielle Community-Integration**. Es besteht **keine Verbindung** zum Betreiber von Solarprognose.de.
+Diese Custom Integration bindet die WebAPI von Solarprognose.de ein. Es handelt sich um eine **nicht-offizielle Community-Integration**.
 
-### 🔑 API-Zugang erhalten (Kurzanleitung)
-Um diese Integration zu nutzen, benötigst du einen Account bei Solarprognose.de:
-1. Registriere dich auf [Solarprognose.de](https://www.solarprognose.de).
-2. Erstelle unter **"Anlageneinstellungen"** eine neue PV-Anlage.
-3. Gehe zu **"User-Einstellungen"** -> **"Schnittstelle / API"**.
-4. Kopiere deinen **API-Key** oder die fertige **API-URL**.
+### Funktionsumfang
+- Prognose Heute / Morgen / Resttag
+- Leistung aktuelle & nächste Stunde
+- API-Status & Abfragezähler
 
 ### Installation via HACS (Empfohlen)
-[![Open your Home Assistant instance and open a repository window in HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=matkoeout&repository=link_solarprognose_de&category=Integration)
+1. Öffne **HACS** in Home Assistant.
+2. Gehe zu **Integrationen**.
+3. Klicke oben rechts auf die drei Punkte und wähle **Benutzerdefinierte Repositories**.
+4. Füge die URL hinzu: `https://github.com/matkoeout/solarprognose.de-community`
+5. Wähle als Kategorie **Integration**.
+6. Suche nach "Solarprognose.de" und installiere sie.
+7. Starte Home Assistant neu.
 
-1. Klicke auf den Button oben (erfordert [My Home Assistant](https://my.home-assistant.io/)).
-2. Manuell: **HACS** -> **Integrationen** -> Drei Punkte (oben rechts) -> **Benutzerdefinierte Repositories**.
-3. URL: `https://github.com/matkoeout/link_solarprognose_de` | Kategorie: **Integration**.
-4. Klicke auf **Herunterladen** und starte Home Assistant neu.
+### manuelle Installation
+1. Kopiere den Ordner `custom_components/solarprognose.de-community` in den lokalen `config/custom_components/` Ordner.
+2. Home Assistant neu starten.
 
+### Konfiguration
+1. Gehe zu **Einstellungen** -> **Geräte & Dienste**.
+2. Klicke auf **Integration hinzufügen**.
+3. Suche nach **Solarprognose.de (Community)**.
+4. Gib deinen API-Key oder die API-URL ein.
+
+### Sensoren
+* **Energie:** today_total, tomorrow_total, rest_day, forecast, current_hour, next_hour
+* **Status:** api_status, api_count, last_update, next_update
+
+### Lizenz
+MIT Lizenz.
 ---
 
 <a name="-english"></a>
 ## 🇺🇸 English
 
 ### IMPORTANT NOTICE / DISCLAIMER
-
-THIS SOFTWARE IS PROVIDED **WITHOUT ANY WARRANTY**.
-
-USE AT **YOUR OWN RISK**.
-
-THE AUTHOR ASSUMES **NO LIABILITY** FOR:
-- INCORRECT, INCOMPLETE OR OUTDATED FORECAST DATA
-- FINANCIAL LOSSES, LOST PROFITS OR WRONG DECISIONS
-- MALFUNCTIONS, FAILURES OR DATA LOSS
-- DAMAGE TO HARDWARE, SOFTWARE OR PV SYSTEMS
-- CONSEQUENTIAL DAMAGES OF ANY KIND
-
-IN PARTICULAR, THE CALCULATED FORECAST VALUES ARE **NOT** SUITABLE FOR:
-- BILLING PURPOSES
-- WARRANTY OR GUARANTEE PURPOSES
-- CONTRACTUAL OR LEGAL DECISIONS
-- CRITICAL CONTROLS
-
-BY INSTALLING AND USING THIS INTEGRATION, YOU EXPRESSLY AGREE TO THESE TERMS.
-
----
+THIS SOFTWARE IS PROVIDED **WITHOUT ANY WARRANTY**. USE AT **YOUR OWN RISK**.
+The author assumes no liability for financial losses, incorrect forecast data, or damage to hardware/software. These values are not suitable for billing or legal purposes.
 
 ### Description
 This custom integration connects the Solarprognose.de WebAPI to Home Assistant. This is an **unofficial community integration** and has no affiliation with the operators of Solarprognose.de.
 
-### 🔑 How to get API Access
-1. Register at [Solarprognose.de](https://www.solarprognose.de).
-2. Go to **"System Settings"** (Anlageneinstellungen) and create your PV system.
-3. Navigate to **"User Settings"** -> **"API / Interface"**.
-4. Copy your **API Key** or the full **API URL**.
+### Features
+- Forecast Today / Tomorrow / Remaining Day
+- Power Current & Next Hour
+- API Status & Request Counter
+- Next update time tracking
 
 ### Installation via HACS (Recommended)
-[![Open your Home Assistant instance and open a repository window in HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=matkoeout&repository=link_solarprognose_de&category=Integration)
+1. Open **HACS** in Home Assistant.
+2. Go to **Integrations**.
+3. Click the three dots in the top right corner and select **Custom repositories**.
+4. Add the URL: `https://github.com/matkoeout/solarprognose.de-community`
+5. Select **Integration** as the category.
+6. Search for "Solarprognose.de" and install it.
+7. Restart Home Assistant.
 
-1. Click the button above.
-2. Manual: Open **HACS** -> **Integrations** -> Three dots -> **Custom repositories**.
-3. URL: `https://github.com/matkoeout/link_solarprognose_de` | Category: **Integration**.
-4. Click **Download** and restart Home Assistant.
+### Manual Installation
+1. Copy the folder `custom_components/solarprognose.de-community` to your `config/custom_components/` directory.
+2. Restart Home Assistant.
+
+### Configuration
+1. Go to **Settings** -> **Devices & Services**.
+2. Click **Add Integration**.
+3. Search for **Solarprognose.de (Community)**.
+4. Enter your API Key or API URL.
 
 ### Sensors
-* **Energy:** Today Total, Tomorrow Total, Remaining Day, Forecast (kWh)
-* **Power:** Current Hour, Next Hour (W)
-* **Status:** API Status, API Requests Today, Last/Next Update
+* **Energy:** today_total, tomorrow_total, rest_day, forecast, current_hour, next_hour
+* **Status:** api_status, api_count, last_update, next_update
 
 ### License
 MIT License.

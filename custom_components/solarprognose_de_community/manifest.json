@@ -1,0 +1,12 @@
+	{
+	  "domain": "solarprognose_de_community",
+	  "name": "Solarprognose.de (Community)",
+	  "documentation": "https://github.com/matkoeout/link_solarprognose_de",
+	  "issue_tracker": "https://github.com/matkoeout/link_solarprognose_de/issues",
+	  "dependencies": [],
+	  "codeowners": ["@matkoeout"],
+	  "version": "1.6.0",
+	  "config_flow": true,
+	  "integration_type": "service",
+	  "iot_class": "cloud_polling"
+	}

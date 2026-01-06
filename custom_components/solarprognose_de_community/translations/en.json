@@ -1,0 +1,54 @@
+{
+  "title": "Solarprognose.de (Community)",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Solarprognose WebAPI Setup",
+        "description": "Provide an API Key OR a URL. (Note: A test call consumes 1 API credit).",
+        "data": {
+          "name": "System Name",
+          "api_key": "API Key",
+          "api_url": "API URL (overrides Key)"
+        }
+      }
+    },
+    "error": {
+      "missing_api": "Input required.",
+      "cannot_connect": "Server unreachable.",
+      "invalid_auth": "Key invalid or expired.",
+      "unknown": "Error during test call."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Solarprognose WebAPI Setup",
+        "description": "Provide an API Key OR a URL. (Note: A test call consumes 1 API credit).",
+        "data": {
+          "api_key": "API Key",
+          "api_url": "API URL (overrides Key)"
+        }
+      }
+    },
+    "error": {
+      "missing_api": "Input required.",
+      "cannot_connect": "Server unreachable.",
+      "invalid_auth": "Key invalid or expired.",
+      "unknown": "Error during test call."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "today_total": { "name": "Today Total" },
+      "tomorrow_total": { "name": "Tomorrow Total" },
+      "rest_day": { "name": "Remaining Day" },
+      "current_hour": { "name": "Current Hour" },
+      "next_hour": { "name": "Next Hour" },
+      "forecast": { "name": "Forecast" },
+      "api_status": { "name": "API Status" },
+      "api_count": { "name": "API Requests Today" },
+      "next_update": { "name": "Next Update Time" },
+      "last_update": { "name": "Last Update" }
+    }
+  }
+}
