@@ -92,6 +92,7 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         translation_key="tomorrow_total",
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
         value_fn=lambda coord: round(sum(float(v[0]) for ts, v in coord.data.items() 
             if dt_util.as_local(dt_util.utc_from_timestamp(int(ts))).date() == (dt_util.now().date() + timedelta(days=1))), 2),
     ),
@@ -100,6 +101,7 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         translation_key="rest_day",
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
         value_fn=lambda coord: round(sum(float(v[0]) for ts, v in coord.data.items() 
             if dt_util.as_local(dt_util.utc_from_timestamp(int(ts))) >= dt_util.now() 
             and dt_util.as_local(dt_util.utc_from_timestamp(int(ts))).date() == dt_util.now().date()), 2),
