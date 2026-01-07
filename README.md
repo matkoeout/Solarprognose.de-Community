@@ -34,11 +34,24 @@ Diese Custom Integration bindet die WebAPI von Solarprognose.de ein. Es handelt 
 - Leistung aktuelle & nächste Stunde
 - API-Status & Abfragezähler
 
+### Installation (HACS)
+
+> **Hinweis:** Diese Integration ist nicht Teil des offiziellen Home Assistant Core.
+
+Diese Integration wird über **HACS (Home Assistant Community Store)** bereitgestellt und bietet folgende Vorteile:
+
+- Einfache Installation
+- Automatische Update-Hinweise
+- Vertrauenswürdige Plattform
+
+Weitere Informationen zur Installation findest du hier:  
+[HACS – Download & Installation](https://www.hacs.xyz/docs/use/download/download/)
+
 ### Installation via HACS (Empfohlen)
 1. Öffne **HACS** in Home Assistant.
 2. Gehe zu **Integrationen**.
 3. Klicke oben rechts auf die drei Punkte und wähle **Benutzerdefinierte Repositories**.
-4. Füge die URL hinzu: `https://github.com/matkoeout/solarprognose.de-community`
+4. Füge die URL hinzu: `https://github.com/matkoeout/solarprognose_de_community`
 5. Wähle als Kategorie **Integration**.
 6. Suche nach "Solarprognose.de (Community)" und installiere sie.
 7. Starte Home Assistant neu.
@@ -140,11 +153,24 @@ This custom integration connects the Solarprognose.de WebAPI to Home Assistant. 
 - API Status & Request Counter
 - Next update time tracking
 
+### Installation (HACS)
+
+> **Note:** This integration is not part of the official Home Assistant Core.
+
+This integration is distributed via **HACS (Home Assistant Community Store)** and provides the following benefits:
+
+- Easy installation
+- Update notifications
+- Trusted distribution platform
+
+Please follow the instructions in the official HACS documentation:  
+[HACS – Download & Installation](https://www.hacs.xyz/docs/use/download/download/)
+
 ### Installation via HACS (Recommended)
 1. Open **HACS** in Home Assistant.
 2. Go to **Integrations**.
 3. Click the three dots in the top right corner and select **Custom repositories**.
-4. Add the URL: `https://github.com/matkoeout/solarprognose.de-community`
+4. Add the URL: `https://github.com/matkoeout/solarprognose_de_community`
 5. Select **Integration** as the category.
 6. Search for "Solarprognose.de (Community)" and install it.
 7. Restart Home Assistant.

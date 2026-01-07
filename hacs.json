@@ -1,7 +1,7 @@
 {
   "name": "Solarprognose.de (Community)",
   "content_in_root": false,
-  "domains": ["solarprognose_de_community"],
+  "domain": ["solarprognose_de_community"],
   "country": ["DE"],
   "homeassistant": "2025.3.0"
 }
