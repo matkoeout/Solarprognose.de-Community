@@ -1,5 +1,4 @@
 import logging
-
 from datetime import timedelta
 from dataclasses import dataclass
 from typing import Callable, Any
@@ -11,12 +10,10 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
 )
 from homeassistant.const import UnitOfEnergy, UnitOfPower
-
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.util import dt as dt_util
 
-from .coordinator import SolarPrognoseCoordinator
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
@@ -33,7 +30,7 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ENERGY,
         state_class=SensorStateClass.TOTAL,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        value_fn=lambda coord: round(sum(val for dt, val in coord.data.items() 
+        value_fn=lambda coord: round(sum(val for dt, val in (coord.data or {}).items() 
             if dt.date() == dt_util.now().date()), 2),
     ),
     SolarSensorEntityDescription(
@@ -42,7 +39,7 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
-        value_fn=lambda coord: round(sum(val for dt, val in coord.data.items() 
+        value_fn=lambda coord: round(sum(val for dt, val in (coord.data or {}).items() 
             if dt.date() == (dt_util.now().date() + timedelta(days=1))), 2),
     ),
     SolarSensorEntityDescription(
@@ -51,7 +48,7 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
-        value_fn=lambda coord: round(sum(val for dt, val in coord.data.items() 
+        value_fn=lambda coord: round(sum(val for dt, val in (coord.data or {}).items() 
             if dt >= dt_util.now() and dt.date() == dt_util.now().date()), 2),
     ),
     SolarSensorEntityDescription(
@@ -60,7 +57,7 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
         state_class=SensorStateClass.TOTAL,
-        value_fn=lambda coord: int(coord.data.get(
+        value_fn=lambda coord: int((coord.data or {}).get(
             dt_util.now().replace(minute=0, second=0, microsecond=0), 0) * 1000),
     ),
     SolarSensorEntityDescription(
@@ -69,7 +66,7 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
         state_class=SensorStateClass.TOTAL,
-        value_fn=lambda coord: int(coord.data.get(
+        value_fn=lambda coord: int((coord.data or {}).get(
             (dt_util.now() + timedelta(hours=1)).replace(minute=0, second=0, microsecond=0), 0) * 1000),
     ),
     SolarSensorEntityDescription(
@@ -78,7 +75,7 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
         state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda coord: int(max([val for dt, val in coord.data.items() 
+        value_fn=lambda coord: int(max([val for dt, val in (coord.data or {}).items() 
             if dt.date() == dt_util.now().date()] or [0]) * 1000),
     ),
     SolarSensorEntityDescription(
@@ -86,7 +83,7 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         translation_key="peak_time_today",
         device_class=SensorDeviceClass.TIMESTAMP,
         value_fn=lambda coord: (
-            max([(val, dt) for dt, val in coord.data.items() if dt.date() == dt_util.now().date()] or [(0, None)])[1]
+            max([(val, dt) for dt, val in (coord.data or {}).items() if dt.date() == dt_util.now().date()] or [(0, None)])[1]
         ),
     ),
     SolarSensorEntityDescription(
@@ -95,7 +92,7 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
         state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda coord: int(max([val for dt, val in coord.data.items() 
+        value_fn=lambda coord: int(max([val for dt, val in (coord.data or {}).items() 
             if dt.date() == (dt_util.now().date() + timedelta(days=1))] or [0]) * 1000),
     ),
     SolarSensorEntityDescription(
@@ -104,11 +101,11 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ENERGY,
         state_class=SensorStateClass.TOTAL_INCREASING,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        value_fn=lambda coord: round(sum(val for dt, val in coord.data.items() 
+        value_fn=lambda coord: round(sum(val for dt, val in (coord.data or {}).items() 
             if dt.date() == dt_util.now().date() and dt <= dt_util.now()), 2),
         attr_fn=lambda coord: {
             "forecast": [{"datetime": dt.isoformat(), "energy": val} 
-                         for dt, val in sorted(coord.data.items())],
+                         for dt, val in sorted((coord.data or {}).items())],
             "integrated_forecast": True
         }
     ),
@@ -117,7 +114,7 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         translation_key="peak_time_tomorrow",
         device_class=SensorDeviceClass.TIMESTAMP,
         value_fn=lambda coord: (
-            max([(val, dt) for dt, val in coord.data.items() 
+            max([(val, dt) for dt, val in (coord.data or {}).items() 
                 if dt.date() == (dt_util.now().date() + timedelta(days=1))] or [(0, None)])[1]
         ),
     ),
@@ -158,26 +155,14 @@ class SolarSensor(CoordinatorEntity, RestoreEntity, SensorEntity):
         }
 
     async def async_added_to_hass(self) -> None:
-        """Wird aufgerufen, wenn die Entität zu HA hinzugefügt wird."""
         await super().async_added_to_hass()
-        
-        # Wir stellen den Wert nur für den api_count Sensor wieder her
         if self.entity_description.key == "api_count":
             last_state = await self.async_get_last_state()
             if last_state and last_state.state not in (None, "unknown", "unavailable"):
                 try:
                     restored_count = int(last_state.state)
-                    
-                    # WICHTIG: Wir setzen den Wert auf das Maximum aus (Wiederhergestellt vs. Aktuell)
-                    # Das verhindert Doppelt-Zählungen und berücksichtigt den ersten Call beim Start.
                     if restored_count > self.coordinator.api_count_today:
-                        _LOGGER.debug(
-                            "API Count von %s auf %s korrigiert", 
-                            self.coordinator.api_count_today, 
-                            restored_count
-                        )
                         self.coordinator.api_count_today = restored_count
-                        
                 except ValueError:
                     _LOGGER.error("Konnte API Count nicht wiederherstellen: %s", last_state.state)
 
