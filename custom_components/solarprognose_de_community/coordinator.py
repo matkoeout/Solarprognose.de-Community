@@ -5,8 +5,9 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.util import dt as dt_util
 
+from .const import DOMAIN
+
 _LOGGER = logging.getLogger(__name__)
-DOMAIN = "solarprognose_de_community"
 
 class SolarPrognoseCoordinator(DataUpdateCoordinator):
     """Zentrale Instanz zum Abrufen der Daten."""
