@@ -19,7 +19,7 @@ class SolarPrognoseCoordinator(DataUpdateCoordinator):
             f"?access-token={api_key}&type=hourly&_format=json"
         )
         
-        # 150 Minuten Intervall entspricht ca. 10 Abfragen/Tag (Sicherheitspuffer für das 12er Limit)
+        # 150 Minuten Intervall entspricht ca. 10 Abfragen/Tag (Sicherheitspuffer fÃ¼r das 12er Limit)
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=timedelta(minutes=150))
         
         self.api_status = None
@@ -33,7 +33,7 @@ class SolarPrognoseCoordinator(DataUpdateCoordinator):
         """Daten von der API abrufen und verarbeiten."""
         now = dt_util.now()
         
-        # API-Zähler bei Datumswechsel zurücksetzen
+        # API-ZÃ¤hler bei Datumswechsel zurÃ¼cksetzen
         if now.date() > self.last_reset_day:
             self.api_count_today = 0
             self.last_reset_day = now.date()
@@ -53,7 +53,7 @@ class SolarPrognoseCoordinator(DataUpdateCoordinator):
 
                     self.last_api_success = now
                     
-                    # Empfehlung der API für den nächsten optimalen Abrufzeitpunkt speichern
+                    # Empfehlung der API fÃ¼r den nÃ¤chsten optimalen Abrufzeitpunkt speichern
                     if next_req := res.get("preferredNextApiRequestAt"):
                         self.next_api_request = dt_util.as_local(
                             dt_util.utc_from_timestamp(int(next_req["epochTimeUtc"]))
