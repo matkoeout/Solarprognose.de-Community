@@ -1,8 +1,12 @@
 views:
   - title: Solarprognose
+    type: sections
+    max_columns: 4
     sections:
       - icon: mdi:solar-power
         cards:
+          - type: heading
+            heading: Leistung & Prognose
           - type: vertical-stack
             cards:
               - type: grid
@@ -21,6 +25,15 @@ views:
                   - type: entity
                     entity: sensor.solarprognose_resttag
                     name: Verbleibend Heute
+              - type: entities
+                title: Peak-Werte Heute
+                entities:
+                  - entity: sensor.solarprognose_spitzenleistung_heute
+                    name: Max. Leistung
+                    icon: mdi:summit
+                  - entity: sensor.solarprognose_zeitpunkt_spitzenleistung_heute
+                    name: Um Uhrzeit
+                    format: time
           - type: custom:apexcharts-card
             graph_span: 22h
             span:
@@ -41,18 +54,24 @@ views:
                 stroke_width: 2
                 unit: kW
                 data_generator: |
-                  /* Transformiert die Liste aus dem forecast-Attribut */
                   return entity.attributes.forecast.map((entry) => {
                     return [new Date(entry.datetime).getTime(), entry.energy];
                   });
+      - icon: mdi:api
+        cards:
+          - type: heading
+            heading: Vorhersage & API
           - type: vertical-stack
             cards:
-              - type: heading
-                heading: Vorhersage & API
               - type: entities
                 entities:
                   - entity: sensor.solarprognose_morgen_gesamt
                     secondary_info: last-updated
+                  - entity: sensor.solarprognose_spitzenleistung_morgen
+                    name: Max. Leistung Morgen
+                    icon: mdi:weather-sunny-alert
+                  - entity: sensor.power_highest_peak_time_tomorrow
+                    name: Um Uhrzeit
                   - type: divider
                   - entity: sensor.solarprognose_api_status
                     name: API Status
@@ -62,6 +81,3 @@ views:
                     name: Letzter Abruf
                   - entity: sensor.solarprognose_nachste_abfragezeit
                     name: Nächster geplanter Abruf
-    type: sections
-    max_columns: 4
-    cards: []

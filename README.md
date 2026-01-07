@@ -52,7 +52,7 @@ Diese Custom Integration bindet die WebAPI von Solarprognose.de ein. Es handelt 
 2. Registriere dich auf Solarprognose.de.
 3. Erstelle unter "Anlageneinstellungen" eine neue PV-Anlage.
 4. Gehe zu "User-Einstellungen" -> "Schnittstelle / API".
-5. Kopiere deinen API-Key oder die fertige API-URL.
+5. Kopiere deinen API-Key für Einzelanlagen oder speziellere API-URLs für komplexe Konfigurationen.
 
 ### Konfiguration
 1. Gehe zu **Einstellungen** -> **Geräte & Dienste**.
@@ -157,7 +157,7 @@ This custom integration connects the Solarprognose.de WebAPI to Home Assistant. 
 1. Register at Solarprognose.de.
 2. Go to "System Settings" (Anlageneinstellungen) and create your PV system.
 3. Navigate to "User Settings" -> "API / Interface".
-4. Copy your API Key or the full API URL.
+4. Copy your API Key für single systems or the full API URL for more complex configurations.
 
 ### Configuration
 1. Go to **Settings** -> **Devices & Services**.

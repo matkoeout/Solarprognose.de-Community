@@ -10,7 +10,8 @@ from homeassistant.components.sensor import (
     SensorStateClass,
     SensorEntityDescription,
 )
-from homeassistant.const import UnitOfEnergy
+from homeassistant.const import UnitOfEnergy, UnitOfPower
+
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
@@ -20,22 +21,20 @@ from homeassistant.helpers.update_coordinator import (
 from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.util import dt as dt_util
 
-from homeassistant.core import HomeAssistant
-
 _LOGGER = logging.getLogger(__name__)
 DOMAIN = "solarprognose_de_community"
 
 @dataclass(frozen=True)
 class SolarSensorEntityDescription(SensorEntityDescription):
-    """Eigene Beschreibungsklasse fuer Solar-Sensoren."""
     value_fn: Callable[[Any], Any] = None
     attr_fn: Callable[[Any], dict[str, Any]] = None
 
 class SolarPrognoseCoordinator(DataUpdateCoordinator):
     """Zentrale Instanz zum Abrufen der Daten."""
+    
     def __init__(self, hass, api_url=None, api_key=None):
         self.api_url = api_url or (
-            f"https://www.solarprognose.de/web/solarprediction/api/v1"
+            "https://www.solarprognose.de/web/solarprediction/api/v1"
             f"?access-token={api_key}&type=hourly&_format=json"
         )
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=timedelta(minutes=150))
@@ -66,17 +65,21 @@ class SolarPrognoseCoordinator(DataUpdateCoordinator):
                         return self.data or {}
 
                     self.last_api_success = now
-                    next_req = res.get("preferredNextApiRequestAt")
-                    if next_req and "epochTimeUtc" in next_req:
+                    if next_req := res.get("preferredNextApiRequestAt"):
                         self.next_api_request = dt_util.as_local(
                             dt_util.utc_from_timestamp(int(next_req["epochTimeUtc"]))
                         )
                     
-                    return {str(ts): [float(v[0])] for ts, v in res.get("data", {}).items()}
-        except Exception as err:
-            raise UpdateFailed(f"API Fehler: {err}")
+                    # Zeitstempel direkt in datetime-Objekte umwandeln für einfachere Sensor-Logik
+                    processed_data = {}
+                    for ts, v in res.get("data", {}).items():
+                        local_dt = dt_util.as_local(dt_util.utc_from_timestamp(int(ts)))
+                        processed_data[local_dt] = float(v[0])
+                    return processed_data
 
-# --- Definition der Sensoren ---
+        except Exception as err:
+            raise UpdateFailed(f"API Fehler: {err}") from err
+
 SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
     SolarSensorEntityDescription(
         key="today_total",
@@ -84,8 +87,8 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ENERGY,
         state_class=SensorStateClass.TOTAL,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        value_fn=lambda coord: round(sum(float(v[0]) for ts, v in coord.data.items() 
-            if dt_util.as_local(dt_util.utc_from_timestamp(int(ts))).date() == dt_util.now().date()), 2),
+        value_fn=lambda coord: round(sum(val for dt, val in coord.data.items() 
+            if dt.date() == dt_util.now().date()), 2),
     ),
     SolarSensorEntityDescription(
         key="tomorrow_total",
@@ -93,8 +96,8 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
-        value_fn=lambda coord: round(sum(float(v[0]) for ts, v in coord.data.items() 
-            if dt_util.as_local(dt_util.utc_from_timestamp(int(ts))).date() == (dt_util.now().date() + timedelta(days=1))), 2),
+        value_fn=lambda coord: round(sum(val for dt, val in coord.data.items() 
+            if dt.date() == (dt_util.now().date() + timedelta(days=1))), 2),
     ),
     SolarSensorEntityDescription(
         key="rest_day",
@@ -102,9 +105,8 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
-        value_fn=lambda coord: round(sum(float(v[0]) for ts, v in coord.data.items() 
-            if dt_util.as_local(dt_util.utc_from_timestamp(int(ts))) >= dt_util.now() 
-            and dt_util.as_local(dt_util.utc_from_timestamp(int(ts))).date() == dt_util.now().date()), 2),
+        value_fn=lambda coord: round(sum(val for dt, val in coord.data.items() 
+            if dt >= dt_util.now() and dt.date() == dt_util.now().date()), 2),
     ),
     SolarSensorEntityDescription(
         key="current_hour",
@@ -112,7 +114,8 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
-        value_fn=lambda coord: int(float(coord.data.get(str(int(dt_util.now().replace(minute=0, second=0, microsecond=0).timestamp())), [0])[0]) * 1000),
+        value_fn=lambda coord: int(coord.data.get(
+            dt_util.now().replace(minute=0, second=0, microsecond=0), 0) * 1000),
     ),
     SolarSensorEntityDescription(
         key="next_hour",
@@ -120,7 +123,34 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
-        value_fn=lambda coord: int(float(coord.data.get(str(int((dt_util.now() + timedelta(hours=1)).replace(minute=0, second=0, microsecond=0).timestamp())), [0])[0]) * 1000),
+        value_fn=lambda coord: int(coord.data.get(
+            (dt_util.now() + timedelta(hours=1)).replace(minute=0, second=0, microsecond=0), 0) * 1000),
+    ),
+    SolarSensorEntityDescription(
+        key="peak_power_today",
+        translation_key="peak_power_today",
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda coord: int(max([val for dt, val in coord.data.items() 
+            if dt.date() == dt_util.now().date()] or [0]) * 1000),
+    ),
+    SolarSensorEntityDescription(
+        key="peak_time_today",
+        translation_key="peak_time_today",
+        device_class=SensorDeviceClass.TIMESTAMP,
+        value_fn=lambda coord: (
+            max([(val, dt) for dt, val in coord.data.items() if dt.date() == dt_util.now().date()] or [(0, None)])[1]
+        ),
+    ),
+    SolarSensorEntityDescription(
+        key="peak_power_tomorrow",
+        translation_key="peak_power_tomorrow",
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda coord: int(max([val for dt, val in coord.data.items() 
+            if dt.date() == (dt_util.now().date() + timedelta(days=1))] or [0]) * 1000),
     ),
     SolarSensorEntityDescription(
         key="forecast",
@@ -128,14 +158,22 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ENERGY,
         state_class=SensorStateClass.TOTAL_INCREASING,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        value_fn=lambda coord: round(sum(float(v[0]) for ts, v in coord.data.items() 
-            if dt_util.as_local(dt_util.utc_from_timestamp(int(ts))).date() == dt_util.now().date() 
-            and dt_util.as_local(dt_util.utc_from_timestamp(int(ts))) <= dt_util.now()), 2),
+        value_fn=lambda coord: round(sum(val for dt, val in coord.data.items() 
+            if dt.date() == dt_util.now().date() and dt <= dt_util.now()), 2),
         attr_fn=lambda coord: {
-            "forecast": [{"datetime": dt_util.as_local(dt_util.utc_from_timestamp(int(ts))).isoformat(), "energy": float(v[0])} 
-                         for ts, v in sorted(coord.data.items())],
+            "forecast": [{"datetime": dt.isoformat(), "energy": val} 
+                         for dt, val in sorted(coord.data.items())],
             "integrated_forecast": True
         }
+    ),
+    SolarSensorEntityDescription(
+        key="peak_time_tomorrow",
+        translation_key="peak_time_tomorrow",
+        device_class=SensorDeviceClass.TIMESTAMP,
+        value_fn=lambda coord: (
+            max([(val, dt) for dt, val in coord.data.items() 
+                if dt.date() == (dt_util.now().date() + timedelta(days=1))] or [(0, None)])[1]
+        ),
     ),
     SolarSensorEntityDescription(
         key="api_count",
@@ -150,33 +188,16 @@ SENSOR_TYPES: tuple[SolarSensorEntityDescription, ...] = (
         value_fn=lambda coord: "OK" if coord.api_status == 0 else "Fehler",
         attr_fn=lambda coord: {"api_message": coord.api_message},
     ),
-    SolarSensorEntityDescription(
-        key="next_update",
-        translation_key="next_update",
-        device_class=SensorDeviceClass.TIMESTAMP,
-        value_fn=lambda coord: coord.next_api_request,
-    ),
-    SolarSensorEntityDescription(
-        key="last_update",
-        translation_key="last_update",
-        device_class=SensorDeviceClass.TIMESTAMP,
-        value_fn=lambda coord: coord.last_api_success,
-    ),
+    SolarSensorEntityDescription(key="next_update", translation_key="next_update", device_class=SensorDeviceClass.TIMESTAMP, value_fn=lambda coord: coord.next_api_request),
+    SolarSensorEntityDescription(key="last_update", translation_key="last_update", device_class=SensorDeviceClass.TIMESTAMP, value_fn=lambda coord: coord.last_api_success),
 )
 
 async def async_setup_entry(hass, entry, async_add_entities):
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
     custom_name = entry.data.get("name", "Solarprognose")
-
-    async_add_entities(
-        SolarSensor(coordinator, entry, custom_name, description)
-        for description in SENSOR_TYPES
-    )
+    async_add_entities(SolarSensor(coordinator, entry, custom_name, desc) for desc in SENSOR_TYPES)
 
 class SolarSensor(CoordinatorEntity, RestoreEntity, SensorEntity):
-    """Zentrale Sensorklasse für alle Solarprognose-Entitäten."""
-    
-    entity_description: SolarSensorEntityDescription
     _attr_has_entity_name = True
 
     def __init__(self, coordinator, entry, custom_name, description):
@@ -191,23 +212,17 @@ class SolarSensor(CoordinatorEntity, RestoreEntity, SensorEntity):
         }
 
     async def async_added_to_hass(self) -> None:
-        """Wird aufgerufen, wenn die Entität zu HA hinzugefügt wird."""
         await super().async_added_to_hass()
-        
         if self.entity_description.key == "api_count":
             if (last_state := await self.async_get_last_state()) and last_state.state.isdigit():
                 self.coordinator.api_count_today = int(last_state.state)
 
     @property
     def native_value(self):
-        """Berechnet den Wert basierend auf der value_fn."""
         if not self.coordinator.data and self.entity_description.key not in ["api_count", "api_status"]:
             return None
         return self.entity_description.value_fn(self.coordinator)
 
     @property
     def extra_state_attributes(self):
-        """Zusätzliche Attribute."""
-        if self.entity_description.attr_fn:
-            return self.entity_description.attr_fn(self.coordinator)
-        return None
+        return self.entity_description.attr_fn(self.coordinator) if self.entity_description.attr_fn else None
