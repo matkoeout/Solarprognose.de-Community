@@ -109,6 +109,8 @@ cards:
           - entity: sensor.solarprognose_nachste_abfragezeit
             name: Nächster geplanter Abruf
 ```
+### Sampledashboard in mobile app
+[Sceenshot](#-screenshot)
 
 ### Sensoren
 * **Energie:** today_total, tomorrow_total, rest_day, forecast, current_hour, next_hour
@@ -229,6 +231,7 @@ cards:
 ### License
 MIT License.
 
+<a name="-screenshot"></a>
 ### Sampledashboard in mobile app
 
 ![sample dashboard](images/solarpprognose_de_dashboard_sample.png)
