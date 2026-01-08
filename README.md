@@ -228,3 +228,7 @@ cards:
 
 ### License
 MIT License.
+
+### Sampledashboard in mobile app
+
+![sample dashboard](images/solarpprognose_de_dashboard_sample.png)
