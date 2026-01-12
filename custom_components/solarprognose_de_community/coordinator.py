@@ -55,9 +55,9 @@ class SolarPrognoseCoordinator(DataUpdateCoordinator):
                     
                     # Empfehlung der API für den naechsten optimalen Abrufzeitpunkt speichern
                     if next_req := res.get("preferredNextApiRequestAt"):
-                        self.next_api_request = dt_util.as_local(
-                            dt_util.utc_from_timestamp(int(next_req["epochTimeUtc"]))
-                        )
+                        ts_seconds = int(next_req.get("epochTimeUtc", 0))
+                        if ts_seconds > 0:
+                            self.next_api_request = dt_util.utc_from_timestamp(ts_seconds)
                     
                     # Rohdaten (Timestamps) in lokale Datetime-Objekte umwandeln
                     processed_data = {}
