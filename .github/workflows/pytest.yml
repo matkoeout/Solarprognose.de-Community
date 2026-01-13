@@ -1,0 +1,23 @@
+name: Pytest
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install pytest pytest-asyncio pytest-homeassistant-custom-component pytest-cov pytest-socket
+          pip install -e .
+
+      - name: Run tests with pytest
+        run: |
+          pytest -p socket --allow-hosts=127.0.0.1 --cov=custom_components.solarprognose_de_community --cov-report=xml

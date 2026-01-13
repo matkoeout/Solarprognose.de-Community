@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "solarprognose_de_community"
+version = "1.7.0"
+description = "Solarprognose.de Community Integration for Home Assistant"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [
+    { name = "matkoeout" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+
+[tool.setuptools.packages.find]
+include = ["custom_components*"]
